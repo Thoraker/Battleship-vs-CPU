@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 import ErrorPage from '../views/ErrorPage';
 
-describe('HomePage', () => {
+describe('HomePage view', () => {
   afterEach(cleanup);
   it('Should render', () => {
     render(<ErrorPage />, { wrapper: BrowserRouter });

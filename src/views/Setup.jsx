@@ -1,8 +1,14 @@
-function Setup() {
+import { Link } from 'react-router-dom';
+
+function SetupPage() {
   return (
-    <div>
+    <>
       <h1>Setup Page</h1>
-    </div>
+      <p>Place your Boats on the Grid</p>
+      <Link className='btn btn-primary' to='/setup' role='button'>
+        Start
+      </Link>
+    </>
   );
 }
-export default Setup;
+export default SetupPage;

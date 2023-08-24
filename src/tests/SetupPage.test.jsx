@@ -1,30 +1,28 @@
-import { cleanup } from '@testing-library/react';
-import { render, screen } from '@testing-library/react';
-import { Link } from 'react-router-dom';
+import { render, screen, cleanup } from '@testing-library/react';
 import { afterEach, describe, it } from 'vitest';
 
-function ErrorPage() {
-  return (
-    <>
-      <h1>Error</h1>
-      <Link className='btn btn-primary' to='/setup' role='button'>
-        Start
-      </Link>
-    </>
-  );
-}
+import { BrowserRouter } from 'react-router-dom';
 
-describe('ErrorPage', () => {
+import SetupPage from '../views/Setup';
+
+describe('SetupPage view', () => {
   afterEach(cleanup);
   it('should render', () => {
-    render(<ErrorPage />);
+    render(<SetupPage />, { wrapper: BrowserRouter });
   });
   it('should render the title correctly', () => {
-    render(<ErrorPage />);
-    screen.getByText('Error');
+    render(<SetupPage />, { wrapper: BrowserRouter });
+    screen.getByText('Setup Page');
   });
-  it('should render a button', () => {
-    render(<ErrorPage />);
+  it('should render the instructions correctly', () => {
+    render(<SetupPage />, { wrapper: BrowserRouter });
+    screen.getByText('Place your Boats on the Grid');
+  });
+  it('should render a board component', () => {
+    render(<SetupPage />, { wrapper: BrowserRouter });
     screen.getByRole('button');
   });
+  it('should render the board component', () => {});
+  render(<SetupPage />, { wrapper: BrowserRouter });
+  screen.getByRole('button');
 });

@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 import HomePage from '../views/HomePage';
 
-describe('HomePage', () => {
+describe('HomePage view', () => {
   afterEach(cleanup);
   it('Should render', () => {
     render(<HomePage />, { wrapper: BrowserRouter });

@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom/client';
 import { StrictMode } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import App from './views/App.jsx';
+import App from './App.jsx';
 import HomePage from './views/HomePage.jsx';
 import ErrorPage from './views/ErrorPage.jsx';
 import Setup from './views/Setup.jsx';
