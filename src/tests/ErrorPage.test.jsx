@@ -1,36 +1,30 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, it } from 'vitest';
 
-function ErrorPage() {
-  return (
-    <>
-      <h1>Error</h1>
-      <button role='button'>Back to Home</button>
-    </>
-  );
-}
+import { BrowserRouter } from 'react-router-dom';
+
+import ErrorPage from '../views/ErrorPage';
 
 describe('HomePage', () => {
   afterEach(cleanup);
   it('Should render', () => {
-    render(<ErrorPage />);
+    render(<ErrorPage />, { wrapper: BrowserRouter });
   });
   it('Should render the title correctly', () => {
-    render(<ErrorPage />);
+    render(<ErrorPage />, { wrapper: BrowserRouter });
     screen.getByText('Error');
   });
 
   it('Should render a button', () => {
-    render(<ErrorPage />);
+    render(<ErrorPage />, { wrapper: BrowserRouter });
     screen.getByRole('button');
   });
-  it("Should render a button with the text 'Play'", () => {
-    render(<ErrorPage />);
-    screen.getByRole('button', { name: 'Back to Home' });
+  it('Should render generic message', () => {
+    render(<ErrorPage />, { wrapper: BrowserRouter });
+    screen.getByText('Something went wrong...');
   });
-  it('Should show some error message', () => {
-    render(<ErrorPage />);
-    screen.getByText('Rules');
-    screen.getByRole('rules');
+  it("Should render a button with the text 'Play'", () => {
+    render(<ErrorPage />, { wrapper: BrowserRouter });
+    screen.getByRole('button', { name: 'Back to Home' });
   });
 });

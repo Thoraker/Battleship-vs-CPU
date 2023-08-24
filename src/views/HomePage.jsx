@@ -20,9 +20,9 @@ function HomePage() {
           to move your ships again.
         </li>
       </ul>
-      <button role='button'>
-        <Link to='/setup'>Start</Link>
-      </button>
+      <Link className='btn btn-primary' to='/setup' role='button'>
+        Start
+      </Link>
     </>
   );
 }
