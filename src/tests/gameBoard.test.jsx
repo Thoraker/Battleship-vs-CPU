@@ -2,21 +2,7 @@ import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { describe, it, expect } from 'vitest';
 
-function GameBoard(prop) {
-  if (prop === undefined) throw new Error('Parameter prop is required');
-  if (Array.isArray(prop) === false)
-    throw new Error('Parameter prop should be an array');
-  if (prop.length === 0) throw new Error('Parameter prop should not be empty');
-  if (prop.some((item) => typeof item !== 'number' || item !== null))
-    throw new Error('Parameter prop should be an array of numbers');
-  return (
-    <>
-      {prop.map((item, index) => {
-        return <div key={index}>{item}</div>;
-      })}
-    </>
-  );
-}
+import GameBoard from '../components/gameBoard';
 
 describe('Game board react component', () => {
   it('Should be a function', () => {
@@ -37,7 +23,9 @@ describe('Game board react component', () => {
     expect(() => GameBoard(['a', 'b'])).toThrow();
   });
   it('Should render the board', () => {
-    render(<GameBoard prop={[1, 2, 3]} />, { wrapper: BrowserRouter });
+    render(<GameBoard props={[1, 2, 3]} />, {
+      wrapper: BrowserRouter,
+    });
     screen.getByText('1');
   });
 });

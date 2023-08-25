@@ -16,7 +16,7 @@ describe('SetupPage view', () => {
   });
   it('should render the instructions correctly', () => {
     render(<SetupPage />, { wrapper: BrowserRouter });
-    screen.getByText('Place your Boats on the Grid');
+    screen.getByText('Click to place your Boats on the Grid');
   });
   it('should render a board component', () => {
     render(<SetupPage />, { wrapper: BrowserRouter });
