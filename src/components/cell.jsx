@@ -8,14 +8,14 @@ export default function Cell({ children, updateBoard, index }) {
     boat: <i className='bi bi-circle-fill text-dark'></i>,
   };
 
-  function handleClick(index) {
+  function handleClick() {
     updateBoard(index);
   }
   return (
     <>
       <div
         className='col-1 border border-secondary text-center'
-        onClick={handleClick(index)}
+        onClick={handleClick}
       >
         {children === null
           ? check.empty
