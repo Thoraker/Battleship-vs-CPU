@@ -53,7 +53,7 @@ function SetupPage() {
     <>
       <h1>Setup Page</h1>
       <p>Place your Boats on the Grid</p>
-      <div className='row border border-danger'>
+      <div className='row'>
         <div className='col'>
           <h4>Your Ships</h4>
           <GameBoard visibleBoard={board} handleClick={handleClick} />
@@ -64,7 +64,7 @@ function SetupPage() {
           <div className='col'>
             <button
               type='button'
-              className='btn btn-primary btn-sm w-25'
+              className='btn btn-outline-primary btn-sm w-25'
               onClick={() => {
                 setShipType(1);
                 setHorizontal(!horizontal);
@@ -77,7 +77,7 @@ function SetupPage() {
           </div>
           <div>
             <button
-              className='btn btn-primary btn-sm w-25'
+              className='btn btn-outline-primary btn-sm w-25'
               onClick={() => {
                 setShipType(2);
                 setHorizontal(!horizontal);
@@ -90,7 +90,7 @@ function SetupPage() {
           </div>
           <div>
             <button
-              className='btn btn-primary btn-sm w-25'
+              className='btn btn-outline-primary btn-sm w-25'
               onClick={() => {
                 setShipType(3);
                 setHorizontal(!horizontal);
@@ -103,7 +103,7 @@ function SetupPage() {
           </div>
           <div>
             <button
-              className='btn btn-primary btn-sm w-25'
+              className='btn btn-outline-primary btn-sm w-25'
               onClick={() => {
                 setShipType(4);
                 setHorizontal(!horizontal);
@@ -116,7 +116,7 @@ function SetupPage() {
           </div>
           <div>
             <button
-              className='btn btn-primary btn-sm w-25'
+              className='btn btn-outline-primary btn-sm w-25'
               onClick={() => {
                 setShipType(5);
                 setHorizontal(!horizontal);
@@ -129,7 +129,7 @@ function SetupPage() {
           </div>
           <div>
             <button
-              className='btn btn-primary btn-sm w-25'
+              className='btn btn-outline-primary btn-sm w-25'
               onClick={() => state.actions.setPlayerBoard(board)}
               disabled={!(shipType === 0 || shipType === 2)}
             >
@@ -137,7 +137,7 @@ function SetupPage() {
             </button>
             <span>Setup Complete</span>
           </div>
-          <Link className='btn btn-primary' to='/game' role='button'>
+          <Link className='btn btn-outline-primary' to='/game' role='button'>
             Start
           </Link>
         </div>
