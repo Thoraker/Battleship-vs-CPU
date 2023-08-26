@@ -1,10 +1,8 @@
 import PropTypes from 'prop-types';
-import { useContext, useState } from 'react';
 import Cell from './cell';
 
 // Arrays to set the borders of the board
 import { borderLatitude, borderLongitude } from '../assets/bordersArrays';
-import { AppContext } from '../App';
 
 /**
  * Render the layout of the boats for the player or a hidden board for the CPU.
@@ -14,16 +12,7 @@ import { AppContext } from '../App';
  * @return {ReactNode} The rendered game board component.
  */
 function GameBoard({ visibleBoard, handleClick }) {
-  // Global context
-  const state = useContext(AppContext);
-
-  // Local state
-  const [board, setBoard] = useState(visibleBoard);
-  const [turn, setTurn] = useState(state.storage.playerTurn);
-
   function updateBoard(index) {
-    const newTurn = !turn;
-    setTurn(newTurn);
     handleClick(index);
   }
 
@@ -45,10 +34,10 @@ function GameBoard({ visibleBoard, handleClick }) {
                 {index + 1}
               </div>
             ))}
-            {board.map((_, index) => {
+            {visibleBoard.map((_, index) => {
               return (
                 <Cell key={index} index={index} updateBoard={updateBoard}>
-                  {board[index]}
+                  {visibleBoard[index]}
                 </Cell>
               );
             })}

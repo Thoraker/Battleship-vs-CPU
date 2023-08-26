@@ -10,7 +10,7 @@ export default function getState({ getStorage, getActions, setStorage }) {
   return {
     storage: {
       hiddenShips: Array(100).fill(null),
-      playerShips: Array(100).fill(6),
+      playerShips: Array(100).fill(null),
       cpuShips: Array(100).fill(null),
       playerTurn: true,
     },
@@ -23,6 +23,11 @@ export default function getState({ getStorage, getActions, setStorage }) {
       loadInitialData: () => {
         setStorage({
           cpuShips: Array(100).fill(null),
+        });
+      },
+      setPlayerBoard: (board) => {
+        setStorage({
+          playerShips: board,
         });
       },
     },

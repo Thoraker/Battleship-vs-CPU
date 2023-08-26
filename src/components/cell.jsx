@@ -5,7 +5,7 @@ export default function Cell({ children, updateBoard, index }) {
     hit: <i className='bi bi-circle-fill text-danger'></i>,
     miss: <i className='bi bi-circle-fill text-secondary'></i>,
     empty: <i className='bi bi-circle'></i>,
-    boat: <i className='bi bi-circle-fill text-dark'></i>,
+    // boat: <i className='bi bi-circle-fill text-dark'></i>,
   };
 
   function handleClick() {
@@ -23,7 +23,7 @@ export default function Cell({ children, updateBoard, index }) {
           ? check.miss
           : children === 6
           ? check.hit
-          : check.boat}
+          : children}
       </div>
     </>
   );
