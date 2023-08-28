@@ -1,6 +1,11 @@
 import { useEffect } from 'react';
 import { Link, useNavigate, useRouteError } from 'react-router-dom';
 
+/**
+ * Renders the Error Page and the error message, after 3 seconds the user is redirected to the Home Page.
+ *
+ * @return {JSX.Element} The rendered ErrorPage component.
+ */
 export default function ErrorPage() {
   const error = useRouteError();
   const navigate = useNavigate();

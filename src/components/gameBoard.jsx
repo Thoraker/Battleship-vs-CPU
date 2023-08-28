@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import Cell from './cell';
+import { BorderLatitude } from './borderLatitude';
+import { BorderLongitude } from './borderLongitude';
 
 // Arrays to set the borders of the board
-import { BorderLatitude, BorderLongitude } from './bordersComponents';
 
 /**
  * Render the layout of the boats for the player or a hidden board for the CPU.
