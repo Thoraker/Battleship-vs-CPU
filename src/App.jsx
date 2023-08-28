@@ -29,11 +29,11 @@ function App() {
   }, []);
 
   return (
-    <>
+    <div className='container'>
       <AppContext.Provider value={state}>
         <Outlet />
       </AppContext.Provider>
-    </>
+    </div>
   );
 }
 

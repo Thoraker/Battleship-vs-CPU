@@ -18,9 +18,8 @@ function GameBoard({ visibleBoard, handleClick }) {
   return (
     <>
       <div className='row'>
-        <div className='col'></div>
         <BorderLatitude />
-        <div className='col-5 px-0'>
+        <div className='col-5 m-0 p-0'>
           <BorderLongitude>
             {visibleBoard.map((element, index) => {
               return (
@@ -35,7 +34,6 @@ function GameBoard({ visibleBoard, handleClick }) {
           </BorderLongitude>
         </div>
         <BorderLatitude />
-        <div className='col'></div>
       </div>
     </>
   );

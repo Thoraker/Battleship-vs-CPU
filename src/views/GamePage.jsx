@@ -17,7 +17,7 @@ export default function GamePage() {
       setTimeout(() => {
         state.actions.cpuPlayer();
         setTurn(turns.player);
-      }, 3000);
+      }, 2000);
     }
   }, [turn]);
 
@@ -38,7 +38,12 @@ export default function GamePage() {
       state.storage.cpuShips[index] === 0
         ? (state.storage.hiddenShips[index] = 6)
         : (state.storage.hiddenShips[index] = 7);
-      setTurn(turn === turns.player ? turns.cpu : turns.player);
+      state.storage.cpuBoatsCounter[state.storage.cpuShips[index]] -= 1;
+      state.storage.cpuBoatsCounter[state.storage.cpuShips[index]] === 0
+        ? alert(`You sunk my Ship!`)
+        : null;
+      // state.actions.validateHits(index);
+      setTurn(turns.cpu);
     }
   };
 
@@ -47,14 +52,14 @@ export default function GamePage() {
       <h1>Battleships Game</h1>
       <h3>{turn}</h3>
       <div className='row'>
-        <div className='col'>
+        <div className='col p-0'>
           <h5>Your Ships</h5>
           <GameBoard
             visibleBoard={state.storage.playerShips}
             handleClick={handlePlayerBoardClick}
           />
         </div>
-        <div className='col'>
+        <div className='col p-0'>
           <h5>CPU Ships</h5>
           <GameBoard
             visibleBoard={state.storage.hiddenShips}
