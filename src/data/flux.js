@@ -15,7 +15,6 @@ export default function getState({ getStorage, getActions, setStorage }) {
       playerShips: Array(100).fill(0),
       cpuShips: Array(100).fill(0),
       cpuShots: Array(100).fill(0),
-      playerTurn: true,
       cpuHits: [],
       cpuBoatsCounter: {
         1: 5,
