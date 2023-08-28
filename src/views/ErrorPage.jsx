@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Link, useNavigate, useRouteError } from 'react-router-dom';
 
-function ErrorPage() {
+export default function ErrorPage() {
   const error = useRouteError();
   const navigate = useNavigate();
 
@@ -22,4 +22,3 @@ function ErrorPage() {
     </>
   );
 }
-export default ErrorPage;

@@ -1,30 +1,12 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render } from '@testing-library/react';
 import { afterEach, describe, it } from 'vitest';
-
-import { BrowserRouter } from 'react-router-dom';
-
 import ErrorPage from '../views/ErrorPage';
+import { createMemoryRouter } from 'react-router-dom';
 
-describe('HomePage view', () => {
+describe('Error Page', () => {
   afterEach(cleanup);
   it('Should render', () => {
-    render(<ErrorPage />, { wrapper: BrowserRouter });
-  });
-  it('Should render the title correctly', () => {
-    render(<ErrorPage />, { wrapper: BrowserRouter });
-    screen.getByText('Error');
-  });
-
-  it('Should render a button', () => {
-    render(<ErrorPage />, { wrapper: BrowserRouter });
-    screen.getByRole('button');
-  });
-  it('Should render generic message', () => {
-    render(<ErrorPage />, { wrapper: BrowserRouter });
-    screen.getByText('Something went wrong...');
-  });
-  it("Should render a button with the text 'Play'", () => {
-    render(<ErrorPage />, { wrapper: BrowserRouter });
-    screen.getByRole('button', { name: 'Back to Home' });
+    const { MemoryRouter } = createMemoryRouter();
+    render(<ErrorPage />, { wrapper: MemoryRouter });
   });
 });

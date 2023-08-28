@@ -1,77 +1,68 @@
 import { Link } from 'react-router-dom';
-import GameBoard from '../components/gameBoard';
 import { useContext, useState } from 'react';
+
+// Global context
 import { AppContext } from '../App';
-import {
-  setBattleship,
-  setCarrier,
-  setCruiser,
-  setDestroyer,
-  setSubmarine,
-} from '../func/setShips';
+
+import GameBoard from '../components/gameBoard';
+import setCarrier from '../func/setCarrier';
+import setBattleship from '../func/setBattleship';
+import setCruiser from '../func/setCruiser';
+import setSubmarine from '../func/setSubmarine';
+import setDestroyer from '../func/setDestroyer';
 
 function SetupPage() {
   const state = useContext(AppContext);
   const [board, setBoard] = useState(state.storage.playerShips);
-  const [shipType, setShipType] = useState(0);
+  const [shipType, setShipType] = useState(0); // Manage the type of ship to place on the board (Maybe don't need to be a state variable)
   const [horizontal, setHorizontal] = useState(false);
 
   function handleClick(index) {
     let newBoard = [...board];
-
-    if (shipType === 0) return;
-    else if (shipType === 1) {
-      newBoard.map((item) => (item === 1 ? (item = 0) : null));
-      setBoard(newBoard);
+    if (shipType === 0) {
+      return;
+    } else if (shipType === 1) {
       setCarrier(index, horizontal, newBoard);
-      setBoard(newBoard);
     } else if (shipType === 2) {
-      newBoard.map((item) => (item === 1 ? 0 : item));
-      setBoard(newBoard);
       setBattleship(index, horizontal, newBoard);
-      setBoard(newBoard);
     } else if (shipType === 3) {
-      newBoard.map((item) => (item === 1 ? 0 : item));
-      setBoard(newBoard);
       setCruiser(index, horizontal, newBoard);
-      setBoard(newBoard);
     } else if (shipType === 4) {
-      newBoard.map((item) => (item === 1 ? 0 : item));
-      setBoard(newBoard);
       setSubmarine(index, horizontal, newBoard);
-      setBoard(newBoard);
     } else if (shipType === 5) {
-      newBoard.map((item) => (item === 1 ? 0 : item));
-      setBoard(newBoard);
       setDestroyer(index, horizontal, newBoard);
-      setBoard(newBoard);
     }
+    setBoard(newBoard);
     setShipType(0);
   }
 
   return (
     <>
       <h1>Setup Page</h1>
-      <p>Place your Boats on the Grid</p>
+      <h3>Place your Boats on the Grid</h3>
       <div className='row'>
         <div className='col'>
-          <h4>Your Ships</h4>
+          <h5>Your Ships</h5>
           <GameBoard visibleBoard={board} handleClick={handleClick} />
         </div>
         <div className='col g-2'>
-          <h4>Available Ships</h4>
-
+          <h5>Available Ships</h5>
+          <button
+            className='btn btn-outline-primary btn-sm w-25'
+            onClick={() => setHorizontal(!horizontal)}
+          >
+            {horizontal ? 'Horizontal' : 'Vertical'}
+          </button>
           <div className='col'>
             <button
               type='button'
               className='btn btn-outline-primary btn-sm w-25'
               onClick={() => {
                 setShipType(1);
-                setHorizontal(!horizontal);
               }}
               disabled={!(shipType === 0 || shipType === 1)}
             >
-              {horizontal ? 'Horizontal ' : 'Vertical '}Carrier
+              Carrier
             </button>
             <span>5 cells long</span>
           </div>
@@ -80,11 +71,10 @@ function SetupPage() {
               className='btn btn-outline-primary btn-sm w-25'
               onClick={() => {
                 setShipType(2);
-                setHorizontal(!horizontal);
               }}
               disabled={!(shipType === 0 || shipType === 2)}
             >
-              {horizontal ? 'Horizontal ' : 'Vertical '}Battleship
+              Battleship
             </button>
             <span>4 cells long</span>
           </div>
@@ -93,11 +83,10 @@ function SetupPage() {
               className='btn btn-outline-primary btn-sm w-25'
               onClick={() => {
                 setShipType(3);
-                setHorizontal(!horizontal);
               }}
               disabled={!(shipType === 0 || shipType === 3)}
             >
-              {horizontal ? 'Horizontal ' : 'Vertical '}Cruiser
+              Cruiser
             </button>
             <span>3 cells long</span>
           </div>
@@ -106,11 +95,10 @@ function SetupPage() {
               className='btn btn-outline-primary btn-sm w-25'
               onClick={() => {
                 setShipType(4);
-                setHorizontal(!horizontal);
               }}
               disabled={!(shipType === 0 || shipType === 4)}
             >
-              {horizontal ? 'Horizontal ' : 'Vertical '}Submarine
+              Submarine
             </button>
             <span>3 cells long</span>
           </div>
@@ -119,11 +107,10 @@ function SetupPage() {
               className='btn btn-outline-primary btn-sm w-25'
               onClick={() => {
                 setShipType(5);
-                setHorizontal(!horizontal);
               }}
               disabled={!(shipType === 0 || shipType === 5)}
             >
-              {horizontal ? 'Horizontal ' : 'Vertical '}Destroyer
+              Destroyer
             </button>
             <span>2 cells long</span>
           </div>
@@ -131,13 +118,17 @@ function SetupPage() {
             <button
               className='btn btn-outline-primary btn-sm w-25'
               onClick={() => state.actions.setPlayerBoard(board)}
-              disabled={!(shipType === 0 || shipType === 2)}
+              disabled={!(shipType === 0)}
             >
               Finish
             </button>
             <span>Setup Complete</span>
           </div>
-          <Link className='btn btn-outline-primary' to='/game' role='button'>
+          <Link
+            className='btn btn-outline-primary w-25'
+            to={shipType === 0 ? '/game' : '#'}
+            role='button'
+          >
             Start
           </Link>
         </div>
