@@ -15,7 +15,7 @@ export default function getState({ getStorage, getActions, setStorage }) {
       playerShips: Array(100).fill(0),
       cpuShips: Array(100).fill(0),
       cpuShots: Array(100).fill(0),
-      cpuHits: [],
+      cpuLastHits: [],
       cpuBoatsCounter: {
         1: 5,
         2: 4,
@@ -63,28 +63,31 @@ export default function getState({ getStorage, getActions, setStorage }) {
        */
       cpuPlayer: () => {
         const playerBoatsCounter = getStorage().playerBoatsCounter;
-        const newCpuHits = [...getStorage().cpuHits];
+        const cpuLastHits = getStorage().cpuLastHits.slice();
         const shot = Math.floor(Math.random() * 100);
-        const newPlayerShips = [...getStorage().playerShips];
-        const newShots = [...getStorage().cpuShots];
-        if (newCpuHits.length === 0) {
-          newShots[shot] === 0
-            ? (newShots[shot] = 1)
-            : getActions().cpuPlayer();
+        const playerShips = getStorage().playerShips.slice();
+        const cpuShots = getStorage().cpuShots.slice();
+        if (cpuLastHits.length === 0) {
+          if (cpuShots[shot] === 0) {
+            cpuShots[shot] = 1;
+          } else {
+            getActions().cpuPlayer();
+          }
         }
-        if (newPlayerShips[shot] === 0) newPlayerShips[shot] = 6;
-        else {
-          playerBoatsCounter[newPlayerShips[shot]] -= 1;
-          playerBoatsCounter[newPlayerShips[shot]] === 0
-            ? alert(`You sunk my Ship!`)
-            : null;
-          newPlayerShips[shot] = 7;
-          newCpuHits.push(shot);
+        if (playerShips[shot] === 0) {
+          playerShips[shot] = 6;
+        } else {
+          playerBoatsCounter[playerShips[shot]] -= 1;
+          if (playerBoatsCounter[playerShips[shot]] === 0) {
+            alert('You sunk my Ship!');
+          }
+          playerShips[shot] = 7;
+          cpuLastHits.push(shot);
         }
         setStorage({
-          playerShips: newPlayerShips,
-          cpuShots: newShots,
-          cpuHits: newCpuHits,
+          playerShips,
+          cpuShots,
+          cpuLastHits,
         });
       },
     },
