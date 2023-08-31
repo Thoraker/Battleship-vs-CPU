@@ -1,3 +1,4 @@
+import { CpuFollowPlays, CpuRandomPlays } from '../func/cpuPlayer';
 import setCpuShips from '../func/setCpuShips';
 
 /**
@@ -11,11 +12,10 @@ import setCpuShips from '../func/setCpuShips';
 export default function getState({ getStorage, getActions, setStorage }) {
   return {
     storage: {
-      hiddenShips: Array(100).fill(0),
       playerShips: Array(100).fill(0),
       cpuShips: Array(100).fill(0),
-      cpuShots: Array(100).fill(0),
-      cpuLastHits: [],
+      cpuMemoryBoard: Array(100).fill(0),
+      cpuNextTry: 'left',
       cpuBoatsCounter: {
         1: 5,
         2: 4,
@@ -38,12 +38,12 @@ export default function getState({ getStorage, getActions, setStorage }) {
        * @return {undefined} No return value.
        */
       loadInitialData: () => {
-        const board = Array(100).fill(0);
-        while (board.filter((num) => num !== 0).length !== 17) {
-          setCpuShips(board);
+        const cpuShips = Array(100).fill(0);
+        while (cpuShips.filter((num) => num !== 0).length !== 17) {
+          setCpuShips(cpuShips);
         }
         setStorage({
-          cpuShips: board,
+          cpuShips,
         });
       },
       /**
@@ -62,32 +62,30 @@ export default function getState({ getStorage, getActions, setStorage }) {
        * @return {undefined} This function does not return a value.
        */
       cpuPlayer: () => {
-        const playerBoatsCounter = getStorage().playerBoatsCounter;
-        const cpuLastHits = getStorage().cpuLastHits.slice();
-        const shot = Math.floor(Math.random() * 100);
+        let cpuNextTry = getStorage().cpuNextTry;
+        let cpuMemoryBoard = getStorage().cpuMemoryBoard.slice();
         const playerShips = getStorage().playerShips.slice();
-        const cpuShots = getStorage().cpuShots.slice();
-        if (cpuLastHits.length === 0) {
-          if (cpuShots[shot] === 0) {
-            cpuShots[shot] = 1;
-          } else {
-            getActions().cpuPlayer();
-          }
-        }
-        if (playerShips[shot] === 0) {
-          playerShips[shot] = 6;
+        const highestIndexHit = cpuMemoryBoard.findIndex(
+          (num) => num !== 0 && num !== 6
+        );
+        const lowestIndexHit = cpuMemoryBoard.findLastIndex(
+          (num) => num !== 0 && num !== 6
+        );
+        if (lowestIndexHit === -1) {
+          CpuRandomPlays(playerShips, cpuMemoryBoard);
         } else {
-          playerBoatsCounter[playerShips[shot]] -= 1;
-          if (playerBoatsCounter[playerShips[shot]] === 0) {
-            alert('You sunk my Ship!');
-          }
-          playerShips[shot] = 7;
-          cpuLastHits.push(shot);
+          CpuFollowPlays(
+            lowestIndexHit,
+            highestIndexHit,
+            playerShips,
+            cpuMemoryBoard,
+            cpuNextTry
+          );
         }
         setStorage({
           playerShips,
-          cpuShots,
-          cpuLastHits,
+          cpuNextTry,
+          cpuMemoryBoard,
         });
       },
     },

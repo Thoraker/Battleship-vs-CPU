@@ -10,6 +10,8 @@ import { AppContext } from '../App';
 export default function GamePage() {
   const { storage, actions } = useContext(AppContext);
   const [turn, setTurn] = useState(true);
+  const [hiddenShips, setHiddenShips] = useState(Array(100).fill(0));
+
   useEffect(() => {
     if (!turn) {
       setTimeout(() => {
@@ -34,11 +36,14 @@ export default function GamePage() {
    * @param {number} index - The index of the clicked element.
    */
   const handleClick = (index) => {
+    let newHiddenShips = hiddenShips.slice();
     if (turn) {
       if (storage.cpuShips[index] === 0) {
-        storage.hiddenShips[index] = 6;
+        newHiddenShips[index] = 6;
+        setHiddenShips(newHiddenShips);
       } else {
-        storage.hiddenShips[index] = 7;
+        newHiddenShips[index] = 7;
+        setHiddenShips(newHiddenShips);
       }
       storage.cpuBoatsCounter[storage.cpuShips[index]] -= 1;
       if (storage.cpuBoatsCounter[storage.cpuShips[index]] === 0) {
@@ -62,10 +67,7 @@ export default function GamePage() {
         </div>
         <div className='col p-0'>
           <h5>CPU Ships</h5>
-          <GameBoard
-            visibleBoard={storage.hiddenShips}
-            handleClick={handleClick}
-          />
+          <GameBoard visibleBoard={hiddenShips} handleClick={handleClick} />
         </div>
       </div>
     </>

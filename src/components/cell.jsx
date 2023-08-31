@@ -6,7 +6,6 @@ export default function Cell({ element, updateBoard, index }) {
     0: <i className='bi bi-circle'></i>, // Empty cell (no shot yet)
     6: <i className='bi bi-circle-fill text-secondary'></i>, // Miss shot
     7: <i className='bi bi-circle-fill text-danger'></i>, // Hit
-    // 1: <i className='bi bi-circle-fill text-primary'></i>, // Blue circle for the Carrier as an example
   };
 
   /**
