@@ -1,4 +1,3 @@
-import { CpuFollowPlays, CpuRandomPlays } from '../func/cpuPlayer';
 import setCpuShips from '../func/setCpuShips';
 
 /**
@@ -15,6 +14,7 @@ export default function getState({ getStorage, getActions, setStorage }) {
       playerShips: Array(100).fill(0),
       cpuShips: Array(100).fill(0),
       cpuMemoryBoard: Array(100).fill(0),
+      cellsLefts: [],
       cpuNextTry: 'left',
       cpuBoatsCounter: {
         1: 5,
@@ -39,11 +39,16 @@ export default function getState({ getStorage, getActions, setStorage }) {
        */
       loadInitialData: () => {
         const cpuShips = Array(100).fill(0);
+        const cellsLefts = [];
         while (cpuShips.filter((num) => num !== 0).length !== 17) {
           setCpuShips(cpuShips);
         }
+        for (let i = 0; i < 100; i++) {
+          cellsLefts.push(i);
+        }
         setStorage({
           cpuShips,
+          cellsLefts,
         });
       },
       /**
@@ -62,30 +67,131 @@ export default function getState({ getStorage, getActions, setStorage }) {
        * @return {undefined} This function does not return a value.
        */
       cpuPlayer: () => {
-        let cpuNextTry = getStorage().cpuNextTry;
-        let cpuMemoryBoard = getStorage().cpuMemoryBoard.slice();
-        const playerShips = getStorage().playerShips.slice();
-        const highestIndexHit = cpuMemoryBoard.findIndex(
-          (num) => num !== 0 && num !== 6
-        );
-        const lowestIndexHit = cpuMemoryBoard.findLastIndex(
-          (num) => num !== 0 && num !== 6
-        );
-        if (lowestIndexHit === -1) {
-          CpuRandomPlays(playerShips, cpuMemoryBoard);
+        if (getStorage().cpuMemoryBoard.includes(7)) {
+          getActions().CpuFollowPlays();
         } else {
-          CpuFollowPlays(
-            lowestIndexHit,
-            highestIndexHit,
-            playerShips,
-            cpuMemoryBoard,
-            cpuNextTry
-          );
+          getActions().CpuRandomPlays();
+        }
+      },
+      CpuRandomPlays: () => {
+        let cellsLefts = getStorage().cellsLefts;
+        const cellIndexLefts = Math.floor(Math.random() * cellsLefts.length);
+        const shot = cellsLefts[cellIndexLefts];
+        cellsLefts.splice(cellIndexLefts, 1);
+        console.log(cellsLefts, shot, 'cellsLefts');
+        let playerShips = [...getStorage().playerShips];
+        let cpuMemoryBoard = [...getStorage().cpuMemoryBoard];
+        let playerBoatsCounter = getStorage().playerBoatsCounter;
+        let uncoveredCell = playerShips[shot];
+        if (playerShips[shot] === 0) {
+          cpuMemoryBoard[shot] = 6;
+          playerShips[shot] = 6;
+        } else if (playerShips[shot] === 6) {
+          getActions().CpuRandomPlays();
+        } else {
+          cpuMemoryBoard[shot] = 7;
+          playerShips[shot] = 7;
+          playerBoatsCounter[uncoveredCell] =
+            playerBoatsCounter[uncoveredCell] - 1;
         }
         setStorage({
-          playerShips,
-          cpuNextTry,
-          cpuMemoryBoard,
+          playerShips: playerShips,
+          cpuMemoryBoard: cpuMemoryBoard,
+          playerBoatsCounter: playerBoatsCounter,
+          cellsLefts: cellsLefts,
+        });
+      },
+      CpuFollowPlays: () => {
+        let cpuMemoryBoard = [...getStorage().cpuMemoryBoard];
+        let playerShips = [...getStorage().playerShips];
+        let playerBoatsCounter = getStorage().playerBoatsCounter;
+        let cpuNextTry = getStorage().cpuNextTry;
+        let lowestIndexHit = cpuMemoryBoard.findIndex((num) => num === 7);
+        let highestIndexHit = cpuMemoryBoard.findLastIndex((num) => num === 7);
+        let shot = 0;
+        if (cpuNextTry === 'left') {
+          if (lowestIndexHit < 1) {
+            shot = highestIndexHit + 1;
+            cpuNextTry = 'right';
+          } else {
+            shot = lowestIndexHit - 1;
+          }
+        } else if (cpuNextTry === 'right') {
+          if (highestIndexHit > 98) {
+            shot = lowestIndexHit - 1;
+            cpuNextTry = 'up';
+          } else {
+            shot = highestIndexHit + 1;
+          }
+        } else if (cpuNextTry === 'up') {
+          if (lowestIndexHit < 10) {
+            shot = highestIndexHit + 10;
+            cpuNextTry = 'down';
+          } else {
+            shot = lowestIndexHit - 10;
+          }
+        } else if (cpuNextTry === 'down') {
+          if (highestIndexHit > 89) {
+            shot = lowestIndexHit - 10;
+            cpuNextTry = 'left';
+          } else {
+            shot = highestIndexHit + 10;
+          }
+        }
+        setStorage({
+          cpuNextTry: cpuNextTry,
+        });
+        let cellsLefts = getStorage().cellsLefts;
+        cellsLefts.splice(shot, 1);
+        let uncoveredCell = playerShips[shot];
+        if (uncoveredCell === 0) {
+          cpuMemoryBoard[shot] = 6;
+          playerShips[shot] = 6;
+          if (cpuNextTry === 'left') cpuNextTry = 'right';
+          else if (cpuNextTry === 'right') cpuNextTry = 'up';
+          else if (cpuNextTry === 'up') cpuNextTry = 'down';
+          else if (cpuNextTry === 'down') cpuNextTry = 'left';
+          setStorage({
+            cpuNextTry: cpuNextTry,
+          });
+        } else if (uncoveredCell === 6) {
+          if (cpuNextTry === 'left') cpuNextTry = 'right';
+          else if (cpuNextTry === 'right') cpuNextTry = 'up';
+          else if (cpuNextTry === 'up') cpuNextTry = 'down';
+          else if (cpuNextTry === 'down') cpuNextTry = 'left';
+          setStorage({
+            cpuNextTry: cpuNextTry,
+          });
+          getActions().CpuFollowPlays();
+        } else {
+          cpuMemoryBoard[shot] = 7;
+          playerShips[shot] = 7;
+          playerBoatsCounter[uncoveredCell] -= 1;
+          if (playerBoatsCounter[uncoveredCell] === 0) {
+            cpuMemoryBoard = getStorage().cpuMemoryBoard.map((element) => {
+              if (element === 7) {
+                element = 6;
+              }
+            });
+            alert('I sunk your Ship!');
+          }
+          if (
+            playerBoatsCounter[1] === 0 &&
+            playerBoatsCounter[2] === 0 &&
+            playerBoatsCounter[3] === 0 &&
+            playerBoatsCounter[4] === 0 &&
+            playerBoatsCounter[5] === 0
+          ) {
+            alert('I Win!');
+            return;
+          }
+        }
+        setStorage({
+          playerShips: playerShips,
+          cpuMemoryBoard: cpuMemoryBoard,
+          playerBoatsCounter: playerBoatsCounter,
+          cpuNextTry: cpuNextTry,
+          cellsLefts: cellsLefts,
         });
       },
     },

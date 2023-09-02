@@ -8,8 +8,6 @@ export const AppContext = createContext(null);
 
 /**
  * App component, in which we set the global AppContext and render the children routes.
- *
- * @return {JSX.Element} The rendered child component depending on the route (Outlet).
  */
 function App() {
   const [state, setState] = useState(

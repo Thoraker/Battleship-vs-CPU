@@ -1,17 +1,14 @@
+import { AppContext } from '../App';
 import GameBoard from '../components/gameBoard';
 import { useContext, useEffect, useState } from 'react';
-import { AppContext } from '../App';
 
 /**
  * Contains the Game logic for the Page.
- *
- * @returns {JSX.Element}
  */
 export default function GamePage() {
   const { storage, actions } = useContext(AppContext);
   const [turn, setTurn] = useState(true);
   const [hiddenShips, setHiddenShips] = useState(Array(100).fill(0));
-
   useEffect(() => {
     if (!turn) {
       setTimeout(() => {
@@ -20,30 +17,22 @@ export default function GamePage() {
       }, 2000);
     }
   }, [turn]);
-
   /**
    * Disable the click event on the player board.
-   *
-   * @return {undefined} No return value.
    */
   const handlePlayerBoardClick = () => {
     return;
   };
-
   /**
    * Handles the click event, change turns and validate if there is a hit or a miss at given index.
-   *
-   * @param {number} index - The index of the clicked element.
    */
   const handleClick = (index) => {
     let newHiddenShips = hiddenShips.slice();
-    if (turn) {
+    if (turn && storage.cpuShips[index] !== undefined) {
       if (storage.cpuShips[index] === 0) {
         newHiddenShips[index] = 6;
-        setHiddenShips(newHiddenShips);
       } else {
         newHiddenShips[index] = 7;
-        setHiddenShips(newHiddenShips);
       }
       storage.cpuBoatsCounter[storage.cpuShips[index]] -= 1;
       if (storage.cpuBoatsCounter[storage.cpuShips[index]] === 0) {
@@ -51,8 +40,8 @@ export default function GamePage() {
       }
       setTurn(!turn);
     }
+    setHiddenShips(newHiddenShips);
   };
-
   return (
     <>
       <h1>Battleships Game</h1>
