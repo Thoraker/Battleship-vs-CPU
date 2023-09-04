@@ -22,5 +22,4 @@ export default function setCpuShips(ships) {
   setRandomParams();
   setDestroyer(randomIndex, RandomIsHorizontal, ships);
   setRandomParams();
-  console.log({ ships });
 }

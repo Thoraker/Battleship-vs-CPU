@@ -78,7 +78,6 @@ export default function getState({ getStorage, getActions, setStorage }) {
         const cellIndexLefts = Math.floor(Math.random() * cellsLefts.length);
         const shot = cellsLefts[cellIndexLefts];
         cellsLefts.splice(cellIndexLefts, 1);
-        console.log(cellsLefts, shot, 'cellsLefts');
         let playerShips = [...getStorage().playerShips];
         let cpuMemoryBoard = [...getStorage().cpuMemoryBoard];
         let playerBoatsCounter = getStorage().playerBoatsCounter;
@@ -86,10 +85,8 @@ export default function getState({ getStorage, getActions, setStorage }) {
         if (playerShips[shot] === 0) {
           cpuMemoryBoard[shot] = 6;
           playerShips[shot] = 6;
-        } else if (playerShips[shot] === 6) {
-          getActions().CpuRandomPlays();
         } else {
-          cpuMemoryBoard[shot] = 7;
+          cpuMemoryBoard[shot] = uncoveredCell;
           playerShips[shot] = 7;
           playerBoatsCounter[uncoveredCell] =
             playerBoatsCounter[uncoveredCell] - 1;
@@ -142,7 +139,6 @@ export default function getState({ getStorage, getActions, setStorage }) {
           cpuNextTry: cpuNextTry,
         });
         let cellsLefts = getStorage().cellsLefts;
-        cellsLefts.splice(shot, 1);
         let uncoveredCell = playerShips[shot];
         if (uncoveredCell === 0) {
           cpuMemoryBoard[shot] = 6;
@@ -186,6 +182,7 @@ export default function getState({ getStorage, getActions, setStorage }) {
             return;
           }
         }
+        cellsLefts.splice(shot, 1);
         setStorage({
           playerShips: playerShips,
           cpuMemoryBoard: cpuMemoryBoard,
