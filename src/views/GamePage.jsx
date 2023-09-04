@@ -50,13 +50,16 @@ export default function GamePage() {
         <div className='col p-0'>
           <h5>Your Ships</h5>
           <GameBoard
-            visibleBoard={storage.playerShips}
+            visibleBoard={storage.playerShips} // Render the player ships setup
             handleClick={handlePlayerBoardClick}
           />
         </div>
         <div className='col p-0'>
           <h5>CPU Ships</h5>
-          <GameBoard visibleBoard={hiddenShips} handleClick={handleClick} />
+          <GameBoard
+            visibleBoard={hiddenShips} // Render the an empty board
+            handleClick={handleClick}
+          />
         </div>
       </div>
     </>

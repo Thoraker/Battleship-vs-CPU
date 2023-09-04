@@ -4,6 +4,9 @@ import setCruiser from './setCruiser';
 import setDestroyer from './setDestroyer';
 import setSubmarine from './setSubmarine';
 
+/**
+ * Sets all the ships on the CPU board.
+ */
 export default function setCpuShips(ships) {
   let randomIndex = 0;
   let RandomIsHorizontal = true;

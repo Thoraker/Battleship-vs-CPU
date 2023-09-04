@@ -3,8 +3,6 @@ import { borderLongitude } from '../assets/bordersArrays';
 
 /**
  * Generates the JSX code for rendering the border longitude component (up and bottom rows with numbers).
- *
- * @return {JSX.Element} The rendered border longitude component.
  */
 export function BorderLongitude({ children }) {
   return (

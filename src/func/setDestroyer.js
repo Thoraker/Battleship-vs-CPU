@@ -1,9 +1,5 @@
 /**
  * Sets the Destroyer on the board at the specified index at the specified orientation.
- *
- * @param {number} index - The index where the Destroyer will be placed on the board.
- * @param {boolean} isHorizontal - Specifies whether the Destroyer will be placed horizontally or vertically.
- * @param {number[]} boardArray - The array representing the game board.
  */
 export default function setDestroyer(index, isHorizontal, boardArray) {
   // Delete the cells previously marked as a destroyer

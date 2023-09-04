@@ -11,12 +11,18 @@ import setCruiser from '../func/setCruiser';
 import setSubmarine from '../func/setSubmarine';
 import setDestroyer from '../func/setDestroyer';
 
+/**
+ * Render a game board and handling ship placement for the player.
+ */
 function SetupPage() {
   const state = useContext(AppContext);
   const [board, setBoard] = useState(state.storage.playerShips);
   const [shipType, setShipType] = useState(0); // Manage the type of ship to place on the board (Maybe don't need to be a state variable)
   const [horizontal, setHorizontal] = useState(false);
 
+  /**
+   * Handle the click event and set a ship on the board depending on the ship selected.
+   */
   function handleClick(index) {
     let newBoard = [...board];
     if (shipType === 0) {

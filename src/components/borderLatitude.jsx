@@ -2,8 +2,6 @@ import { borderLatitude } from '../assets/bordersArrays';
 
 /**
  * Generates the JSX code for rendering the border latitude component (left and right columns with letters).
- *
- * @return {JSX.Element} The rendered border latitude component.
  */
 export function BorderLatitude() {
   return (

@@ -1,9 +1,5 @@
 /**
  * Sets the Cruiser on the board at the specified index at the specified orientation.
- *
- * @param {number} index - The index where the Cruiser will be placed on the board.
- * @param {boolean} isHorizontal - Specifies whether the Cruiser will be placed horizontally or vertically.
- * @param {number[]} boardArray - The array representing the game board.
  */
 export default function setCruiser(index, isHorizontal, boardArray) {
   // Delete the cells previously marked as a cruiser

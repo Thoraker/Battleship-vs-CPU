@@ -1,12 +1,7 @@
 import setCpuShips from '../func/setCpuShips';
 
 /**
- * Generates a new state object.
- *
- * @param {object} getStorage - a function that retrieves storage
- * @param {object} getActions - a function that retrieves actions
- * @param {function} setStorage - a function that sets storage
- * @return {object} - the new state object
+ * Generates the object for global state.
  */
 export default function getState({ getStorage, getActions, setStorage }) {
   return {
@@ -34,8 +29,6 @@ export default function getState({ getStorage, getActions, setStorage }) {
     actions: {
       /**
        * Creates a new board for the CPU at the start of the game and store in the global state.
-       *
-       * @return {undefined} No return value.
        */
       loadInitialData: () => {
         const cpuShips = Array(100).fill(0);
@@ -53,8 +46,6 @@ export default function getState({ getStorage, getActions, setStorage }) {
       },
       /**
        * Sets the player's board in the storage.
-       *
-       * @param {object} board - The player's board to be stored.
        */
       setPlayerBoard: (board) => {
         setStorage({
@@ -62,9 +53,7 @@ export default function getState({ getStorage, getActions, setStorage }) {
         });
       },
       /**
-       * Simulates the behavior of the CPU player in the game calling random shots.
-       *
-       * @return {undefined} This function does not return a value.
+       * Simulates the behavior of the CPU player in the game.
        */
       cpuPlayer: () => {
         if (getStorage().cpuMemoryBoard.includes(7)) {
@@ -73,41 +62,53 @@ export default function getState({ getStorage, getActions, setStorage }) {
           getActions().CpuRandomPlays();
         }
       },
+
+      /**
+       * Simulates the behavior of the CPU player in the game calling random shots.
+       */
       CpuRandomPlays: () => {
-        let cellsLefts = getStorage().cellsLefts;
+        const { cellsLefts, playerShips, cpuMemoryBoard, playerBoatsCounter } =
+          getStorage();
+
         const cellIndexLefts = Math.floor(Math.random() * cellsLefts.length);
         const shot = cellsLefts[cellIndexLefts];
         cellsLefts.splice(cellIndexLefts, 1);
-        let playerShips = [...getStorage().playerShips];
-        let cpuMemoryBoard = [...getStorage().cpuMemoryBoard];
-        let playerBoatsCounter = getStorage().playerBoatsCounter;
-        let uncoveredCell = playerShips[shot];
-        if (playerShips[shot] === 0) {
-          cpuMemoryBoard[shot] = 6;
+
+        const uncoveredCell = playerShips[shot];
+        if (uncoveredCell === 0) {
+          cpuMemoryBoard[shot] = 6; // Set hits and misses in the board for the cpu to keep track
           playerShips[shot] = 6;
         } else {
-          cpuMemoryBoard[shot] = uncoveredCell;
-          playerShips[shot] = 7;
-          playerBoatsCounter[uncoveredCell] =
-            playerBoatsCounter[uncoveredCell] - 1;
+          cpuMemoryBoard[shot] = 7;
+          playerShips[shot] = 7; // Set hits and misses in the board for the cpu to keep track
+          playerBoatsCounter[uncoveredCell] -= 1;
         }
+
         setStorage({
-          playerShips: playerShips,
-          cpuMemoryBoard: cpuMemoryBoard,
-          playerBoatsCounter: playerBoatsCounter,
-          cellsLefts: cellsLefts,
+          playerShips,
+          cpuMemoryBoard,
+          playerBoatsCounter,
+          cellsLefts,
         });
       },
+
+      /**
+       * Simulates the behavior of the CPU player in the game calling following shots after hit.
+       */
       CpuFollowPlays: () => {
-        let cpuMemoryBoard = [...getStorage().cpuMemoryBoard];
-        let playerShips = [...getStorage().playerShips];
-        let playerBoatsCounter = getStorage().playerBoatsCounter;
-        let cpuNextTry = getStorage().cpuNextTry;
-        let lowestIndexHit = cpuMemoryBoard.findIndex((num) => num === 7);
-        let highestIndexHit = cpuMemoryBoard.findLastIndex((num) => num === 7);
+        const storage = getStorage();
         let shot = 0;
+        let cpuMemoryBoard = [...storage.cpuMemoryBoard];
+        let playerShips = [...storage.playerShips];
+        let playerBoatsCounter = storage.playerBoatsCounter;
+        let cpuNextTry = storage.cpuNextTry;
+        let lowestIndexHit = cpuMemoryBoard.findIndex((num) => num === 7); // Set the lowest index for followup shots
+        let highestIndexHit = cpuMemoryBoard.findLastIndex((num) => num === 7); // Set the highest index for followup shots
+        let cellsLefts = storage.cellsLefts;
+        // Try shots from direction set by cpuNextTry
         if (cpuNextTry === 'left') {
           if (lowestIndexHit < 1) {
+            // Handle the borders of the board
             shot = highestIndexHit + 1;
             cpuNextTry = 'right';
           } else {
@@ -115,6 +116,7 @@ export default function getState({ getStorage, getActions, setStorage }) {
           }
         } else if (cpuNextTry === 'right') {
           if (highestIndexHit > 98) {
+            // Handle the borders of the board
             shot = lowestIndexHit - 1;
             cpuNextTry = 'up';
           } else {
@@ -122,6 +124,7 @@ export default function getState({ getStorage, getActions, setStorage }) {
           }
         } else if (cpuNextTry === 'up') {
           if (lowestIndexHit < 10) {
+            // Handle the borders of the board
             shot = highestIndexHit + 10;
             cpuNextTry = 'down';
           } else {
@@ -129,6 +132,7 @@ export default function getState({ getStorage, getActions, setStorage }) {
           }
         } else if (cpuNextTry === 'down') {
           if (highestIndexHit > 89) {
+            // Handle the borders of the board
             shot = lowestIndexHit - 10;
             cpuNextTry = 'left';
           } else {
@@ -136,12 +140,12 @@ export default function getState({ getStorage, getActions, setStorage }) {
           }
         }
         setStorage({
-          cpuNextTry: cpuNextTry,
+          cpuNextTry: cpuNextTry, // Update cpuNextTry in the storage
         });
-        let cellsLefts = getStorage().cellsLefts;
+
         let uncoveredCell = playerShips[shot];
         if (uncoveredCell === 0) {
-          cpuMemoryBoard[shot] = 6;
+          cpuMemoryBoard[shot] = 6; // Set hits and misses in the board for the cpu to keep track
           playerShips[shot] = 6;
           if (cpuNextTry === 'left') cpuNextTry = 'right';
           else if (cpuNextTry === 'right') cpuNextTry = 'up';
@@ -160,11 +164,12 @@ export default function getState({ getStorage, getActions, setStorage }) {
           });
           getActions().CpuFollowPlays();
         } else {
-          cpuMemoryBoard[shot] = 7;
+          cpuMemoryBoard[shot] = 7; // Set hits and misses in the board for the cpu to keep track
           playerShips[shot] = 7;
           playerBoatsCounter[uncoveredCell] -= 1;
           if (playerBoatsCounter[uncoveredCell] === 0) {
-            cpuMemoryBoard = getStorage().cpuMemoryBoard.map((element) => {
+            // Validate if the player sunk a boat and delete hits when a boat is sunk to try random shots again
+            cpuMemoryBoard = storage.cpuMemoryBoard.map((element) => {
               if (element === 7) {
                 element = 6;
               }
